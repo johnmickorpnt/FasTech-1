@@ -1,138 +1,62 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, SafeAreaView, ScrollView } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, SafeAreaView, FlatList, View } from 'react-native';
 import { Component } from "react";
 import { Col, Row, Grid } from "react-native-easy-grid";
 
-export default class Table extends Component {
-    render() {
-        return (
-            <Grid>
-                <Col>
-                    <Row style={customStyles.headerCotainer}>
-                        <Text style={customStyles.headerFont}>Appointment</Text>
-                    </Row>
+
+function Table({ data }) {
+
+    return (
+        <FlatList
+            data={data}
+            keyExtractor={(item, index) => item.apt_id}
+            renderItem={({ item }) => (
+                <View>
                     <Row style={customStyles.dataRow}>
                         <Col>
                             <Row style={customStyles.medCol}>
-                                <Text style={{ fontWeight: "bold" }}>Hardware & Software Repair and Installation</Text>
+                                <Text style={{ fontWeight: "bold" }}>{item.service}</Text>
                             </Row>
                             <Row style={customStyles.smallCol}>
-                                <Text>Date: 2021-03-26</Text>
+                                <Text>Date: {item.date}</Text>
                             </Row>
                             <Row style={customStyles.smallCol}>
-                                <Text>Time: 2:00 PM</Text>
+                                <Text>Time: {item.time}</Text>
                             </Row>
                         </Col>
-                    </Row>
-                    <Row style={customStyles.dataRow}>
                         <Col>
-                            <Row style={customStyles.medCol}>
-                                <Text style={{ fontWeight: "bold" }}>Data Recovery  & Backup Services</Text>
-                            </Row>
-                            <Row style={customStyles.smallCol}>
-                                <Text>Date: 2021-03-23</Text>
-                            </Row>
-                            <Row style={customStyles.smallCol}>
-                                <Text>Time: 11:30 AM</Text>
+                            <Row style={customStyles.verticalAlign}>
+                                <TouchableOpacity style={
+                                    item.status === "pending" ? (customStyles.btnApprovalContainer) :
+                                        (item.status === "payment" ? (customStyles.btnPaymentContainer) :
+                                            (item.status === "servicing") ? (customStyles.btnServicingContainer) :
+                                                (item.status === "declined" || item.status === "cancelled") ? (customStyles.btnDeclinedContainer) : (customStyles.btnCompleteContainer))
+                                }>
+                                    <Text style={customStyles.btnText}>{item.status}</Text>
+                                </TouchableOpacity>
                             </Row>
                         </Col>
-                    </Row>
-                    <Row style={customStyles.dataRow}>
                         <Col>
-                            <Row style={customStyles.medCol}>
-                                <Text style={{ fontWeight: "bold"}}>Troubleshooting & Networking installation</Text>
-                            </Row>
-                            <Row style={customStyles.smallCol}>
-                                <Text>Date: 2021-03-20</Text>
-                            </Row>
-                            <Row style={customStyles.smallCol}>
-                                <Text>Time: 1:00 PM</Text>
-                            </Row>
-                        </Col>
-                    </Row>
-                    <Row style={customStyles.dataRow}>
-                        <Col>
-                            <Row style={customStyles.medCol}>
-                                <Text style={{ fontWeight: "bold" }}>Hardware & Software repair and installation</Text>
-                            </Row>
-                            <Row style={customStyles.smallCol}>
-                                <Text>Date: 2021-03-18</Text>
-                            </Row>
-                            <Row style={customStyles.smallCol}>
-                                <Text>Time: 9:00 AM</Text>
+                            <Row style={customStyles.maxHeight}>
+                                <Text style={customStyles.centerText}>
+                                    {
+                                        item.status === "pending" ? "Cancel Appointment" :
+                                            (item.status === "payment" ? "For Payment" :
+                                                (item.status === "servicing") ? "View Details" :
+                                                    (item.status === "declined" || item.status === "cancelled") ? ("Cancelled or Declined") : ("Evaluate your technician"))
+                                    }
+                                </Text>
                             </Row>
                         </Col>
                     </Row>
-                    <Row style={customStyles.dataRow}>
-                        <Col>
-                            <Row style={customStyles.medCol}>
-                                <Text style={{ fontWeight: "bold" }}>Virus and Malware Removal</Text>
-                            </Row>
-                            <Row style={customStyles.smallCol}>
-                                <Text>Date: 2021-03-16</Text>
-                            </Row>
-                            <Row style={customStyles.smallCol}>
-                                <Text>Time: 10:30 AM</Text>
-                            </Row>
-                        </Col>
-                    </Row>
-                </Col>
-                <Col>
-                    <Row style={customStyles.headerCotainer}>
-                        <Text style={customStyles.headerFont}>Status</Text>
-                    </Row>
-                    <Row style={customStyles.verticalAlign}>
-                        <TouchableOpacity style={customStyles.btnCompleteContainer}>
-                            <Text style={customStyles.btnText}>Complete</Text>
-                        </TouchableOpacity>
-                    </Row>
-                    <Row style={customStyles.verticalAlign}>
-                        <TouchableOpacity style={customStyles.btnServicingContainer}>
-                            <Text style={customStyles.btnText}>For Servicing</Text>
-                        </TouchableOpacity>
-                    </Row>
-                    <Row style={customStyles.verticalAlign}>
-                        <TouchableOpacity style={customStyles.btnPaymentContainer}>
-                            <Text style={customStyles.btnText}>For Payment</Text>
-                        </TouchableOpacity>
-                    </Row>
-                    <Row style={customStyles.verticalAlign}>
-                        <TouchableOpacity style={customStyles.btnDeclinedContainer}>
-                            <Text style={customStyles.btnText}>Declined</Text>
-                        </TouchableOpacity>
-                    </Row>
-                    <Row style={customStyles.verticalAlign}>
-                        <TouchableOpacity style={customStyles.btnApprovalContainer}>
-                            <Text style={customStyles.btnText}>For Approval</Text>
-                        </TouchableOpacity>
-                    </Row>
-                </Col>
-                <Col>
-                    <Row style={customStyles.headerCotainer}>
-                        <Text style={customStyles.headerFont}>Actions</Text>
-                    </Row>
-                    <Row style={customStyles.maxHeight}>
-                        <Text style={customStyles.centerText}>Evaluate the Technician</Text>
-                    </Row>
-                    <Row style={customStyles.maxHeight}>
-                        <Text style={customStyles.centerText}>View Details    </Text>
-                    </Row>
-                    <Row style={customStyles.maxHeight}>
-                        <Text style={customStyles.centerText}>For Payment</Text>
-                    </Row>
-                    <Row style={customStyles.maxHeight}>
-                        <Text style={customStyles.centerText}>View Details</Text>
-                    </Row>
-                    <Row style={customStyles.maxHeight}>
-                        <Text style={customStyles.centerText} >Cancel Appointment</Text>
-                    </Row>
-                </Col>
-            </Grid>
-        );
-    }
+                </View>
+            )}
+            style={{ marginBottom: "10%" }}
+        />
+    );
 }
 const customStyles = StyleSheet.create({
-    firstCol:{
+    firstCol: {
         width: 150,
         backgroundColor: "pink"
     },
@@ -147,7 +71,7 @@ const customStyles = StyleSheet.create({
         justifyContent: 'center', //Centered vertically
         alignItems: 'center', // Centered horizontally
         flex: 1,
-        borderBottomWidth: 1
+        // borderBottomWidth: 1
     },
     headerCotainer: {
         flex: 1,
@@ -158,7 +82,7 @@ const customStyles = StyleSheet.create({
         minWidth: 50,
         minHeight: 50,
         maxHeight: 50
-        
+
     },
     headerFont: {
         fontWeight: 'bold',
@@ -170,7 +94,7 @@ const customStyles = StyleSheet.create({
         alignItems: 'center', // Centered horizontally
         flex: 1,
         minHeight: 100,
-        borderBottomWidth: 1
+        // borderBottomWidth: 1
     },
     medCol: {
         height: 70
@@ -228,3 +152,5 @@ const customStyles = StyleSheet.create({
         paddingHorizontal: 12
     },
 });
+
+export default Table;

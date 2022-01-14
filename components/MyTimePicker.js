@@ -1,37 +1,52 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Button } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import DateTimePicker from "@react-native-community/datetimepicker";
 
-const MyTimePicker = () => {
-    const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+const MyTimePicker = ({ data }) => {
+    const [time, setTime] = useState(new Date(1598051730000));
+    const [mode, setMode] = useState('time');
+    const [show, setShow] = useState(false);
 
-    const showDatePicker = () => {
-        setDatePickerVisibility(true);
+    const onChange = (event, selectedTime) => {
+        const currentTime = selectedTime || time;
+        setShow(Platform.OS === 'ios');
+        setTime(currentTime);
+        const newTime = selectedTime.toString();
+        data(newTime.substring(newTime.indexOf(":") - 2, 21));
     };
 
-    const hideDatePicker = () => {
-        setDatePickerVisibility(false);
+    const showMode = (currentMode) => {
+        setShow(true);
+        setMode(currentMode);
     };
 
-    const handleConfirm = date => {
-        hideDatePicker();
+    const showTimepicker = () => {
+        showMode('time');
     };
 
     return (
         <View>
+            <View>
             <TouchableOpacity
-            activeOpacity={.5}
-            onPress={showDatePicker} 
-            style={timeStyle.btn}>
-            <Text style={timeStyle.TextStyle}> Choose Time </Text>
+                activeOpacity={.5}
+                onPress={showTimepicker}
+                style={timeStyle.btn}>
+                <Text style={timeStyle.TextStyle}> Choose Time </Text>
             </TouchableOpacity>
-            <DateTimePickerModal
-                isVisible={isDatePickerVisible}
-                mode="time"
-                onConfirm={handleConfirm}
-                onCancel={hideDatePicker}
-            />
+            </View>
+            {show && (
+                <DateTimePicker
+                    testID="dateTimePicker"
+                    value={time}
+                    mode={mode}
+                    is24Hour={false}
+                    display="default"
+                    onChange={onChange}
+                    
+                />
+            )}
         </View>
     );
 };
@@ -41,7 +56,7 @@ const timeStyle = StyleSheet.create({
         textAlign: 'center',
         fontSize: 17,
     },
-      btn:{
+    btn: {
         left: 40,
         paddingTop: 5,
         paddingBottom: 5,

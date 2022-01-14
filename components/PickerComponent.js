@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import RNPickerSelect from "react-native-picker-select";
-export const PickerComponent = () => {
+export const PickerComponent = ({data}) => {
     const placeholder = {
         label: 'Type of Service...',
         value: null,
@@ -17,12 +17,12 @@ export const PickerComponent = () => {
         }}>
             <View style={{ borderBottomWidth: 1, width: 295 , borderColor: "#6610f2"}}>
                 <RNPickerSelect
-                    onValueChange={(value) => console.log(value)}
+                    onValueChange={(value) => data(value)}
                     items={[
-                        { label: 'Hardware & Software Repair and Installation', value: '1' },
-                        { label: 'Data Recovery & Backup Services ', value: '2' },
-                        { label: 'Troubleshooting & Networking ', value: '3' },
-                        { label: 'Hardware & Software repair and Installation', value: '4' },
+                        { label: 'Hardware & Software Repair and Installation', value: 'Hardware & Software Repair and Installation' },
+                        { label: 'Data Recovery & Backup Services', value: 'Data Recovery & Backup Services' },
+                        { label: 'Troubleshooting & Networking', value: 'Troubleshooting & Networking ' },
+                        { label: 'Hardware & Software repair and Installation', value: 'Hardware & Software repair and Installation' },
                     ]}
                     placeholder={placeholder}
                     useNativeAndroidPickerStyle={true}

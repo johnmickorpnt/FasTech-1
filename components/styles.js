@@ -1,5 +1,6 @@
 
 import { ScrollView, Alert, StatusBar, StyleSheet} from 'react-native';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 const styles = StyleSheet.create({
     accountDesc: {
@@ -237,7 +238,7 @@ const styles = StyleSheet.create({
         paddingTop: StatusBar.currentHeight,
     },
     scrollView: {
-        marginHorizontal: 10,
+        marginBottom: 5
     },
     input1: {
         top: 50,
@@ -526,6 +527,10 @@ const styles = StyleSheet.create({
         height: 140,
         width: 180,
         opacity: 0.8,
+    },
+    customBg:{
+        flex:1,
+        flexDirection:"column"
     }
 })
 

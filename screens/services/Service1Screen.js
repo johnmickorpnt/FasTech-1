@@ -1,11 +1,13 @@
 import styles from '../../components/styles';
 import { useFonts, Lobster_400Regular } from '@expo-google-fonts/lobster';
 import AppLoading from "expo-app-loading";
-import React from 'react';
-import { ScrollView, SafeAreaView, View, Keyboard, TextInput, Text, Image, ImageBackground, TouchableOpacity } from 'react-native';
+import { React, useEffect } from 'react';
+import { useRoute } from '@react-navigation/native';
+import { BackHandler, ScrollView, SafeAreaView, View, Keyboard, TextInput, Text, Image, ImageBackground, TouchableOpacity } from 'react-native';
 
 
-function Service1Screen({ navigation }) {
+function Service1Screen({ navigation, route }) {
+    console.log(route.params);
     return (
         <View>
             <SafeAreaView style={styles.container}>
@@ -31,7 +33,7 @@ function Service1Screen({ navigation }) {
                             <TouchableOpacity
                                 style={styles.SubmitButtonStyle5}
                                 activeOpacity={.5}
-                                onPress={() => navigation.navigate('Home')}>
+                                onPress={() => navigation.navigate('dashBoard')}>
                                 <Text style={styles.TextStyle6}> Back to Home </Text>
                             </TouchableOpacity>
                         </View>

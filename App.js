@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { createContext, useState } from "react";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -18,10 +18,10 @@ import HomeScreen from "./screens/HomeScreen";
 
 const HomeStack = createStackNavigator();
 
-function HomeStackScreen() {
+function HomeStackScreen({route}) {
   return (
     <HomeStack.Navigator screenOptions={{ headerShown: false }} >
-      <HomeStack.Screen name="Home" component={HomeScreen} />
+      <HomeStack.Screen name="Home" component={HomeScreen} initialParams={{user:route.params.user}}/>
       <HomeStack.Screen name="Service1" component={Service1Screen} />
       <HomeStack.Screen name="Service2" component={Service2Screen} />
       <HomeStack.Screen name="Service3" component={Service3Screen} />
@@ -32,26 +32,23 @@ function HomeStackScreen() {
 
 const SettingsStack = createStackNavigator();
 
-function SettingsStackScreen() {
+function SettingsStackScreen( {route} ) {
   return (
     <SettingsStack.Navigator screenOptions={{ headerShown: false }} >
-      <SettingsStack.Screen name="Settings" component={SettingsScreen} />
+      <SettingsStack.Screen name="Settings" component={SettingsScreen} initialParams={{user:route.params.user, token:route.params.token}}/>
       <SettingsStack.Screen name="Summary" component={SummaryScreen} />
     </SettingsStack.Navigator>
   );
 }
 
 const AppointmentStack = createStackNavigator();
-
-class AppointmentStackScreen extends Component {
-  render() {
-    return (
-      <AppointmentStack.Navigator screenOptions={{ headerShown: false }} >
-        <AppointmentStack.Screen name="Appointment" component={AppointmentScreen} />
-        <AppointmentStack.Screen name="Summary" component={SummaryScreen} />
-      </AppointmentStack.Navigator>
-    );
-  }
+function AppointmentStackScreen({ route }) {
+  return (
+    <AppointmentStack.Navigator screenOptions={{ headerShown: false }} >
+      <AppointmentStack.Screen name="Appointment" component={AppointmentScreen} initialParams={{user:route.params.user, token:route.params.token}}/>
+      <AppointmentStack.Screen name="Summary" component={SummaryScreen} />
+    </AppointmentStack.Navigator>
+  );
 }
 
 
@@ -68,8 +65,11 @@ function App() {
     </NavigationContainer>
   );
 }
-function dashBoard() {
+
+export const UserContext = createContext();
+function dashBoard({ route }) {
   return (
+    // <UserContext.Provider value={route.params.user}>
     <Tab.Navigator
       initialRouteName="Home"
       screenOptions={({ route }) => ({
@@ -95,11 +95,11 @@ function dashBoard() {
         inactiveTintColor: 'gray',
       }}
     >
-      <Tab.Screen name="Appointment" component={AppointmentStackScreen} />
-      <Tab.Screen name="Home" component={HomeStackScreen} />
-      <Tab.Screen name="Settings" component={SettingsStackScreen} />
+      <Tab.Screen name="Appointment" component={AppointmentStackScreen} initialParams={{user:route.params.user, token:route.params.token}} />
+      <Tab.Screen name="Home" component={HomeStackScreen} initialParams={{user:route.params.user , token:route.params.token}}/>
+      <Tab.Screen name="Settings" component={SettingsStackScreen} initialParams={{user:route.params.user , token:route.params.token}}/>
     </Tab.Navigator>
-
+    // </UserContext.Provider>
   );
 }
 

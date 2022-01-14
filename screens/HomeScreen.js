@@ -1,11 +1,37 @@
 import styles from '../components/styles';
 import { useFonts, Lobster_400Regular } from '@expo-google-fonts/lobster';
 import AppLoading from "expo-app-loading";
-import React from 'react';
-import { ScrollView, Alert, StatusBar, StyleSheet, SafeAreaView, View, Keyboard, TextInput, Text, Image, ImageBackground, TouchableOpacity } from 'react-native';
+import { React, useEffect, useCallback, useContext } from 'react';
+import { BackHandler, ScrollView, Alert, StatusBar, StyleSheet, SafeAreaView, View, Keyboard, TextInput, Text, Image, ImageBackground, TouchableOpacity } from 'react-native';
 import { Icon } from 'react-native-elements';
+import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/native';
 
-function HomeScreen({ navigation }) {
+function HomeScreen({ route, navigation }) {
+    const currRoute = useRoute();
+    // const user = useContext(UserContext);
+    useFocusEffect(
+        useCallback(() => {
+            const onBackPress = () => {
+                if (currRoute.name !== "Home") {
+                    return false;
+                } else {
+
+                    Alert.alert("Exit app",
+                        "Are you sure to quit the application?",
+                        [
+                            { text: "No", onPress: () => console.log("Cancelled") },
+                            { text: "Yes", onPress: () => BackHandler.exitApp() }
+                        ],
+                        { cancelable: false }
+                    )
+                    return true;
+                }
+            };
+            BackHandler.addEventListener('hardwareBackPress', onBackPress);
+            return () =>
+                BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+        }, [])
+    );
     let [fontsLoaded] = useFonts({
         Lobster_400Regular,
         "WorkSans_700Bold": require("../assets/fonts/WorkSans_700Bold.ttf"),
@@ -42,7 +68,8 @@ function HomeScreen({ navigation }) {
                         <TouchableOpacity
                             style={styles.SubmitButtonStyle1}
                             activeOpacity={.5}
-                            onPress={() => navigation.navigate('Appointment')}>
+                            onPress={() => navigation.navigate("Appointment")
+                            }>
                             <Text style={styles.TextStyle}> Set an Appointment </Text>
                         </TouchableOpacity>
 
@@ -128,7 +155,6 @@ function HomeScreen({ navigation }) {
                                     <Text style={styles.itemHeader}>Email</Text>
                                     <Text>info@fastech.com</Text>
                                 </View>
-
                             </View>
 
                             <View style={styles.column2}>
